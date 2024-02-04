@@ -15,10 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('discount_id')->nullable();
-
             $table->foreign('category_id')->references('id')->on('categories');
-            $table->foreign('discount_id')->references('id')->on('discounts');
+
             $table->timestamps();
 
             $table->index('name');

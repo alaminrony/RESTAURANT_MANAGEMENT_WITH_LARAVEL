@@ -13,20 +13,14 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->tinyInteger('level');
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->unsignedBigInteger('discount_id')->nullable();
-            $table->enum('type', ['category', 'subcategory']);
+            $table->string('title')->index();
+            $table->bigInteger('parent_id')->unsigned()->nullable();
+
             $table->timestamps();
-
-            //Declear foreign Key
             $table->foreign('parent_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('discount_id')->references('id')->on('discounts');
-
-
-            $table->index('name');
         });
+
+
     }
 
     /**

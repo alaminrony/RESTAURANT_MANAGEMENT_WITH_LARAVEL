@@ -9,25 +9,26 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'level', 'parent_id', 'discount_id'];
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
 
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
-    public function children()
+    public static function getCategoryLevel($category_id, $level = 0)
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        $category = self::find($category_id);
+        if (!is_null($category->parent_id)) {
+            $level++;
+            return self::getCategoryLevel($category->parent_id, $level);
+        } else {
+            return $level;
+        }
     }
 
-    public function items()
-    {
-        return $this->hasMany(Item::class);
-    }
 
-    public function discount()
-    {
-        return $this->belongsTo(Discount::class);
-    }
 }
