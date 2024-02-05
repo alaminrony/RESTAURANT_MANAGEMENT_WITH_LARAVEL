@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CategoryCollection;
+use App\Http\Requests\Category\CategoryStoreRequest;
 
 class CategoryController extends Controller
 {
@@ -19,18 +20,8 @@ class CategoryController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(CategoryStoreRequest $request)
     {
-        $rules = [
-            'title' => 'required'
-        ];
-
-        $validator = Validator::make($request->only('title'), $rules);
-
-        if ($validator->fails()) {
-            return response()->json(['success' => 0, 'message' => 'Please fix these errors', 'errors' => $validator->errors()], 500);
-        }
-
         $category = new Category();
         $category->title = $request->title;
         $category->parent_id = $request->parent_id != '' ? $request->parent_id : null;

@@ -20,10 +20,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(CategoryController::class)->prefix('category')->group(function(){
+Route::post('/login', 'Auth\\LoginController@login');
+Route::post('/register', 'Auth\\RegisterController@register');
+
+
+Route::controller(CategoryController::class)->prefix('category')->group(function () {
     Route::get('/list',             'index')->name('category.list');
     Route::post('/store',           'store')->name('category.store');
     Route::get('/htmltree',         'getCategoryHtmlTree')->name('category.htmltree');
 });
-
-
