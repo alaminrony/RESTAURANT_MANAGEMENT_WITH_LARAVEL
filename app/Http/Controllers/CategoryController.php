@@ -32,6 +32,46 @@ class CategoryController extends Controller
         return response()->json(['success' => 0, 'message' => 'Does not Created successfully'], 500);
     }
 
+    public function show($id)
+    {
+        $category = Category::with('parent')->findOrFail($id);
+
+        //        return (new SingleCategory($category))->response()->setStatusCode(Response::HTTP_OK);
+        //        echo "<pre>";print_r($category->toArray());exit;
+        return response()->json(['category' => $category], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $category = Category::with('parent')->findOrFail($id);
+
+        $validator = Validator::make($request->only('title'), [
+            'title' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => 0, 'message' => 'Please fix these errors', 'errors' => $validator->errors()], 500);
+        }
+
+        $category->title = $request->title;
+        $category->parent_id = $request->parent_id != '' ? $request->parent_id : null;
+        if ($category->save()) {
+            return response()->json(['success' => 1, 'message' => 'Updated successfully', 'category' => $category], Response::HTTP_OK);
+        }
+
+        return response()->json(['success' => 1, 'message' => 'Does not Updated successfully'], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    public function destroy($id)
+    {
+        $category = Category::findOrFail($id);
+        if ($category->delete()) {
+            return response()->json(['success' => 1, 'message' => 'Deleted successfully'], Response::HTTP_OK);
+        }
+        return response()->json(['success' => 0, 'message' => 'Deleted done not successfull'], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+
 
     public function getCategoryHtmlTree(Request $request, $parent_id = null)
     {
