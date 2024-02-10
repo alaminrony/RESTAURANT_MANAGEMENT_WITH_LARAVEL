@@ -31,11 +31,13 @@ Route::controller(LoginController::class)->middleware('auth:api')->group(functio
     Route::get('/check-login',          'checkLogin')->name('user.checkLogin');
 });
 
-Route::controller(CategoryController::class)->prefix('category')->middleware('auth:api')->group(function () {
+Route::controller(CategoryController::class)->prefix('category')->group(function () {
     Route::get('/list',             'index')->name('category.list');
     Route::post('/store',           'store')->name('category.store');
-    Route::get('/{id}',             'show')->name('category.show');
-    Route::put('/{id}',             'update')->name('category.update');
+    Route::get('/{id}/show',             'show')->name('category.show');
     Route::get('/htmltree',         'getCategoryHtmlTree')->name('category.htmltree');
+    Route::put('/{id}/update',             'update')->name('category.update');
+
+
     Route::delete('/{id}',          'destroy')->name('category.destroy');
 });

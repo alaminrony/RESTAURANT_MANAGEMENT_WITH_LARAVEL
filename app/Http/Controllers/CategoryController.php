@@ -75,6 +75,7 @@ class CategoryController extends Controller
 
     public function getCategoryHtmlTree(Request $request, $parent_id = null)
     {
+        // dd('sdfsdfs');
         $categories = Category::where('parent_id', $parent_id);
 
         if ($request->except_id) {
